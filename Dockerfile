@@ -1,28 +1,25 @@
 FROM node:18
 
-WORKDIR /app
+# Set working directory to the app directory directly
+WORKDIR /app/excalidraw-app
 
-# Copy all files
-COPY . .
+# Copy package files from the app directory
+COPY excalidraw-app/package*.json ./
+COPY excalidraw-app/yarn.lock ./
 
-# Install global dependencies with force flag
-RUN npm install -g cross-env --force
-
-# Install dependencies in the workspace root
+# Install dependencies
 RUN yarn install --frozen-lockfile
 
-# Install specific dependencies in the app directory
-RUN cd excalidraw-app && yarn add -D vite vite-plugin-html @vitejs/plugin-react
+# Copy only the app directory contents
+COPY excalidraw-app/ ./
 
 # Set environment variables
 ENV VITE_APP_ENABLE_TRACKING=true
 ENV VITE_APP_GIT_SHA=development
+ENV NODE_ENV=production
 
-# Build the app from the app directory
-RUN cd excalidraw-app && yarn build
-
-# Set working directory to the app
-WORKDIR /app/excalidraw-app
+# Build the app
+RUN yarn build
 
 # Start the app
 CMD ["yarn", "start"]
