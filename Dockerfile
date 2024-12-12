@@ -20,7 +20,7 @@ ENV NODE_ENV=production
 # Build the app
 WORKDIR /app/excalidraw-app
 RUN yarn install --frozen-lockfile
-RUN yarn add -D @vitejs/plugin-react vite-plugin-html vite vite-plugin-svgr vite-plugin-ejs vite-plugin-pwa vite-plugin-checker
+RUN yarn add -D @vitejs/plugin-react vite-plugin-html vite vite-plugin-svgr vite-plugin-ejs vite-plugin-pwa vite-plugin-checker vite-plugin-sitemap
 RUN yarn build
 
 # Serve the built files
