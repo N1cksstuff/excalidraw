@@ -30,7 +30,14 @@ ENV VITE_APP_DOCKER_BUILD=true
 
 # Move to app directory and install its dependencies
 WORKDIR /app/excalidraw-app
-RUN yarn add -D @vitejs/plugin-react@4.2.1 vite-plugin-html@3.2.2 vite@5.0.12 vite-plugin-svgr@4.2.0 vite-plugin-ejs@1.7.0 vite-plugin-pwa@0.17.4 typescript@5.0.2
+RUN yarn add -D @vitejs/plugin-react@4.2.1 \
+    vite-plugin-html@3.2.2 \
+    vite@5.0.12 \
+    vite-plugin-svgr@4.2.0 \
+    vite-plugin-ejs@1.7.0 \
+    vite-plugin-pwa@0.17.4 \
+    vite-plugin-checker@0.6.2 \
+    typescript@5.0.2
 
 # Build the app using the app's build script
 RUN yarn build:app:docker
