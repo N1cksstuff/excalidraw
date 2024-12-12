@@ -19,25 +19,28 @@ ENV NODE_ENV=production
 ENV VITE_APP_DOCKER_BUILD=true
 
 # Create a Docker-specific vite config
-RUN echo 'import { defineConfig } from "vite"; \
-    import react from "@vitejs/plugin-react"; \
-    import { VitePWA } from "vite-plugin-pwa"; \
-    import svgrPlugin from "vite-plugin-svgr"; \
-    import { ViteEjsPlugin } from "vite-plugin-ejs"; \
-    import { checker } from "vite-plugin-checker"; \
-    export default defineConfig({ \
-      plugins: [ \
-        react(), \
-        checker({ typescript: true }), \
-        svgrPlugin(), \
-        ViteEjsPlugin(), \
-        VitePWA({ register
+RUN echo 'import { defineConfig } from "vite";\n\
+import react from "@vitejs/plugin-react";\n\
+import { VitePWA } from "vite-plugin-pwa";\n\
+import svgrPlugin from "vite-plugin-svgr";\n\
+import { ViteEjsPlugin } from "vite-plugin-ejs";\n\
+import { checker } from "vite-plugin-checker";\n\
+\n\
+export default defineConfig({\n\
+  plugins: [\n\
+    react(),\n\
+    checker({ typescript: true }),\n\
+    svgrPlugin(),\n\
+    ViteEjsPlugin(),\n\
+    VitePWA({ registerType: "autoUpdate" })\n\
+  ]\n\
+});' > /app/excalidraw-app/vite.config.docker.mts
 
 # Build the app
 WORKDIR /app/excalidraw-app
 # Install app-specific dependencies with specific versions
 RUN yarn add -D @vitejs/plugin-react vite-plugin-html vite vite-plugin-svgr vite-plugin-ejs vite-plugin-pwa vite-plugin-checker
-RUN yarn build:app:docker
+RUN VITE_USER_CONFIG_FILE=vite.config.docker.mts yarn build:app:docker
 
 # Serve the built files
 RUN npm install -g serve
