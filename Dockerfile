@@ -18,6 +18,21 @@ ENV VITE_APP_GIT_SHA=development
 ENV NODE_ENV=production
 ENV VITE_APP_DOCKER_BUILD=true
 
+# Create a Docker-specific vite config
+RUN echo 'import { defineConfig } from "vite"; \
+    import react from "@vitejs/plugin-react"; \
+    import { VitePWA } from "vite-plugin-pwa"; \
+    import svgrPlugin from "vite-plugin-svgr"; \
+    import { ViteEjsPlugin } from "vite-plugin-ejs"; \
+    import { checker } from "vite-plugin-checker"; \
+    export default defineConfig({ \
+      plugins: [ \
+        react(), \
+        checker({ typescript: true }), \
+        svgrPlugin(), \
+        ViteEjsPlugin(), \
+        VitePWA({ register
+
 # Build the app
 WORKDIR /app/excalidraw-app
 # Install app-specific dependencies with specific versions
