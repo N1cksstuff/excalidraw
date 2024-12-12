@@ -16,11 +16,12 @@ RUN yarn install --frozen-lockfile --network-timeout 300000
 ENV VITE_APP_ENABLE_TRACKING=true
 ENV VITE_APP_GIT_SHA=development
 ENV NODE_ENV=production
+ENV VITE_APP_DOCKER_BUILD=true
 
 # Build the app
 WORKDIR /app/excalidraw-app
 # Install app-specific dependencies with specific versions
-RUN yarn add -D @vitejs/plugin-react vite-plugin-html vite vite-plugin-svgr vite-plugin-ejs vite-plugin-pwa vite-plugin-checker vite-plugin-sitemap@0.7.1
+RUN yarn add -D @vitejs/plugin-react vite-plugin-html vite vite-plugin-svgr vite-plugin-ejs vite-plugin-pwa vite-plugin-checker
 RUN yarn build:app:docker
 
 # Serve the built files

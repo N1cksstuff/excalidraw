@@ -54,11 +54,10 @@ export default defineConfig(({ mode }) => {
       assetsInlineLimit: 0,
     },
     plugins: [
-      Sitemap({
+      !envVars.VITE_APP_DOCKER_BUILD && Sitemap({
         hostname: "https://excalidraw.com",
         outDir: "build",
         changefreq: "monthly",
-        // its static in public folder
         generateRobotsTxt: false,
       }),
       woff2BrowserPlugin(),
@@ -235,7 +234,7 @@ export default defineConfig(({ mode }) => {
       createHtmlPlugin({
         minify: true,
       }),
-    ],
+    ].filter(Boolean),
     publicDir: "../public",
   };
 });
