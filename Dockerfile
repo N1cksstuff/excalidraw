@@ -40,7 +40,7 @@ export default defineConfig({\n\
 WORKDIR /app/excalidraw-app
 # Install app-specific dependencies with specific versions
 RUN yarn add -D @vitejs/plugin-react vite-plugin-html vite vite-plugin-svgr vite-plugin-ejs vite-plugin-pwa vite-plugin-checker
-RUN VITE_USER_CONFIG_FILE=vite.config.docker.mts yarn build:app:docker
+RUN cross-env VITE_APP_DISABLE_SENTRY=true vite build --config vite.config.docker.mts
 
 # Serve the built files
 RUN npm install -g serve
