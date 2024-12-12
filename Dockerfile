@@ -19,8 +19,9 @@ ENV NODE_ENV=production
 
 # Build the app
 WORKDIR /app/excalidraw-app
-# Remove the separate yarn install since we already installed workspace dependencies
-RUN yarn build
+# Install app-specific dependencies
+RUN yarn add -D @vitejs/plugin-react vite-plugin-html vite vite-plugin-svgr vite-plugin-ejs vite-plugin-pwa vite-plugin-checker vite-plugin-sitemap
+RUN yarn build:app:docker
 
 # Serve the built files
 RUN npm install -g serve
