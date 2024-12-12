@@ -37,6 +37,7 @@ RUN yarn add -D @vitejs/plugin-react@4.2.1 \
     vite-plugin-ejs@1.7.0 \
     vite-plugin-pwa@0.17.4 \
     vite-plugin-checker@0.6.2 \
+    vite-plugin-sitemap@0.7.1 \
     typescript@5.0.2
 
 # Build the app using the app's build script
