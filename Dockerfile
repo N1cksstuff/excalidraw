@@ -28,11 +28,15 @@ ENV VITE_APP_GIT_SHA=development
 ENV NODE_ENV=production
 ENV VITE_APP_DOCKER_BUILD=true
 
-# Build the app using the workspace script
+# Move to app directory and install its dependencies
+WORKDIR /app/excalidraw-app
+RUN yarn add -D @vitejs/plugin-react@4.2.1 vite-plugin-html@3.2.2 vite@5.0.12 vite-plugin-svgr@4.2.0 vite-plugin-ejs@1.7.0 vite-plugin-pwa@0.17.4 typescript@5.0.2
+
+# Build the app using the app's build script
 RUN yarn build:app:docker
 
 # Serve the built files
 RUN npm install -g serve
-CMD ["serve", "-s", "excalidraw-app/build", "-p", "3000"]
+CMD ["serve", "-s", "build", "-p", "3000"]
 
 EXPOSE 3000
