@@ -1,19 +1,21 @@
-FROM node:18 AS build
+FROM node:16
 
-WORKDIR /opt/node_app
+WORKDIR /app
 
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the code
 COPY . .
 
-# do not ignore optional dependencies:
-# Error: Cannot find module @rollup/rollup-linux-x64-gnu
-RUN yarn --network-timeout 600000
+# Build the app
+RUN npm run build
 
-ARG NODE_ENV=production
+# Start the app
+CMD ["npm", "start"]
 
-RUN yarn build:app:docker
-
-FROM nginx:1.27-alpine
-
-COPY --from=build /opt/node_app/excalidraw-app/build /usr/share/nginx/html
-
-HEALTHCHECK CMD wget -q -O /dev/null http://localhost || exit 1
+# Expose the port
+EXPOSE 3000
