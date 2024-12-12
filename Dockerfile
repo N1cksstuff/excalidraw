@@ -8,24 +8,21 @@ COPY . .
 # Install global dependencies
 RUN npm install -g cross-env --force
 
-# Install all workspace dependencies
-RUN yarn install --frozen-lockfile
-
-# Install Vite dependencies explicitly
-RUN cd excalidraw-app && yarn add -D @vitejs/plugin-react vite
+# Clean yarn cache and install dependencies
+RUN yarn cache clean
+RUN yarn install --frozen-lockfile --network-timeout 300000
 
 # Set build environment variables
 ENV VITE_APP_ENABLE_TRACKING=true
 ENV VITE_APP_GIT_SHA=development
 ENV NODE_ENV=production
 
-# Build the specific package we need
-RUN cd excalidraw-app && yarn build:app
-
-# Set working directory to the built app
+# Build the app
 WORKDIR /app/excalidraw-app
+RUN yarn install --frozen-lockfile
+RUN yarn build
 
-# Serve the built files instead of running the dev server
+# Serve the built files
 RUN npm install -g serve
 CMD ["serve", "-s", "dist", "-p", "3000"]
 
