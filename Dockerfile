@@ -5,11 +5,11 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install global dependencies
-RUN npm install -g cross-env yarn
+# Install global dependencies with force flag
+RUN npm install -g cross-env --force
 
-# Install dependencies with legacy peer deps flag
-RUN npm install --legacy-peer-deps
+# Install dependencies
+RUN yarn install --frozen-lockfile
 
 # Copy the rest of the code
 COPY . .
@@ -18,8 +18,7 @@ COPY . .
 ENV VITE_APP_ENABLE_TRACKING=true
 ENV VITE_APP_GIT_SHA=development
 
-# Build the app using yarn
-RUN yarn install
+# Build the app
 RUN yarn build
 
 # Start the app
