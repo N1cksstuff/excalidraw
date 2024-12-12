@@ -19,8 +19,8 @@ ENV NODE_ENV=production
 
 # Build the app
 WORKDIR /app/excalidraw-app
-# Install app-specific dependencies
-RUN yarn add -D @vitejs/plugin-react vite-plugin-html vite vite-plugin-svgr vite-plugin-ejs vite-plugin-pwa vite-plugin-checker vite-plugin-sitemap
+# Install app-specific dependencies with specific versions
+RUN yarn add -D @vitejs/plugin-react vite-plugin-html vite vite-plugin-svgr vite-plugin-ejs vite-plugin-pwa vite-plugin-checker vite-plugin-sitemap@0.7.1
 RUN yarn build:app:docker
 
 # Serve the built files
