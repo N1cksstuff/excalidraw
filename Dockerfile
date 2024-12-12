@@ -24,22 +24,23 @@ import react from "@vitejs/plugin-react";\n\
 import { VitePWA } from "vite-plugin-pwa";\n\
 import svgrPlugin from "vite-plugin-svgr";\n\
 import { ViteEjsPlugin } from "vite-plugin-ejs";\n\
-import { checker } from "vite-plugin-checker";\n\
 \n\
 export default defineConfig({\n\
   plugins: [\n\
     react(),\n\
-    checker({ typescript: true }),\n\
     svgrPlugin(),\n\
     ViteEjsPlugin(),\n\
     VitePWA({ registerType: "autoUpdate" })\n\
-  ]\n\
+  ],\n\
+  define: {\n\
+    "process.env.IS_PREACT": JSON.stringify("false")\n\
+  }\n\
 });' > /app/excalidraw-app/vite.config.docker.mts
 
 # Build the app
 WORKDIR /app/excalidraw-app
 # Install app-specific dependencies with specific versions
-RUN yarn add -D @vitejs/plugin-react vite-plugin-html vite vite-plugin-svgr vite-plugin-ejs vite-plugin-pwa vite-plugin-checker
+RUN yarn add -D @vitejs/plugin-react vite-plugin-html vite vite-plugin-svgr vite-plugin-ejs vite-plugin-pwa typescript@5.0.2
 RUN cross-env VITE_APP_DISABLE_SENTRY=true vite build --config vite.config.docker.mts
 
 # Serve the built files
