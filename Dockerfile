@@ -1,28 +1,28 @@
 FROM node:18
 
-# Set working directory to the app directory directly
-WORKDIR /app/excalidraw-app
+WORKDIR /app
 
-# Copy package files from the app directory
-COPY excalidraw-app/package*.json ./
-COPY excalidraw-app/yarn.lock ./
+# Copy the entire repository content first
+COPY . .
 
-# Install dependencies
+# Install global dependencies
+RUN npm install -g cross-env --force
+
+# Install all workspace dependencies
 RUN yarn install --frozen-lockfile
 
-# Copy only the app directory contents
-COPY excalidraw-app/ ./
-
-# Set environment variables
+# Set build environment variables
 ENV VITE_APP_ENABLE_TRACKING=true
 ENV VITE_APP_GIT_SHA=development
 ENV NODE_ENV=production
 
-# Build the app
-RUN yarn build
+# Build the specific package we need
+RUN cd excalidraw-app && yarn build:app
 
-# Start the app
+# Set working directory to the built app
+WORKDIR /app/excalidraw-app
+
+# Start command
 CMD ["yarn", "start"]
 
-# Expose the port
 EXPOSE 3000
