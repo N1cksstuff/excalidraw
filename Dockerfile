@@ -28,44 +28,22 @@ ENV VITE_APP_GIT_SHA=development
 ENV NODE_ENV=production
 ENV VITE_APP_DOCKER_BUILD=true
 
-# Move to app directory and install its dependencies first
+# Move to app directory
 WORKDIR /app/excalidraw-app
+
+# Install all required dependencies from the original vite.config.mts
 RUN yarn add -D @vitejs/plugin-react@4.2.1 \
     vite-plugin-html@3.2.2 \
     vite@5.0.12 \
     vite-plugin-svgr@4.2.0 \
     vite-plugin-ejs@1.7.0 \
     vite-plugin-pwa@0.17.4 \
+    vite-plugin-checker@0.6.2 \
+    vite-plugin-sitemap@0.7.1 \
     typescript@5.0.2
 
-# Create a Docker-specific vite config that excludes problematic plugins
-RUN echo 'import { defineConfig } from "vite";\n\
-import react from "@vitejs/plugin-react";\n\
-import { VitePWA } from "vite-plugin-pwa";\n\
-import svgrPlugin from "vite-plugin-svgr";\n\
-import { ViteEjsPlugin } from "vite-plugin-ejs";\n\
-import { createHtmlPlugin } from "vite-plugin-html";\n\
-\n\
-export default defineConfig({\n\
-  build: {\n\
-    outDir: "build",\n\
-    sourcemap: true,\n\
-    assetsInlineLimit: 0\n\
-  },\n\
-  plugins: [\n\
-    react(),\n\
-    svgrPlugin(),\n\
-    ViteEjsPlugin(),\n\
-    VitePWA({ registerType: "autoUpdate" }),\n\
-    createHtmlPlugin({ minify: true })\n\
-  ],\n\
-  define: {\n\
-    "process.env.IS_PREACT": JSON.stringify("false")\n\
-  }\n\
-});' > vite.config.docker.mts
-
-# Build the app using the Docker config
-RUN cross-env VITE_APP_DISABLE_SENTRY=true vite build --config vite.config.docker.mts
+# Build the app using the existing build script
+RUN yarn build:app:docker
 
 # Serve the built files
 RUN npm install -g serve
